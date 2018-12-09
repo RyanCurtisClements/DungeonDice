@@ -5,14 +5,34 @@ using System.Web;
 
 namespace DungeonDice.Models
 {
-    public class DiceRoller
+    public class Dice
     {
-        public int rollResult = 0;
+        private Random rand = new Random();
+        private int sidesCount;
 
-        public int D4Roll(out int rollResult)
+        public Dice()
         {
-            Random rolld4 = new Random();
-            rollResult = rolld4.Next(4);
+            sidesCount = 20;
+        }
+
+        public Dice(int sidesCount)
+        {
+            this.sidesCount = sidesCount;
+        }
+
+        public int GetSidesCount()
+        {
+            return sidesCount;
+        }
+
+        public int Roll()
+        {
+            return rand.Next(1, sidesCount + 1);
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Rolling a {0}-sided die", sidesCount);
         }
     }
 }
