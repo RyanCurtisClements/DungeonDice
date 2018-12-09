@@ -43,17 +43,37 @@ namespace DungeonDice.Models
         public int RefModifier { get; set; }
         public int WillModifier { get; set; }
 
-        public Attack()
-        {
-
-        }
-
         public int BaseAttackBonus { get; set; }
         public int CombatManeuverBonus { get; set; }
         public int CombatManeuverDefense { get; set; }
         public int ArmorClass { get; set; }
         public int TouchArmorClass { get; set; }
         public int FlatFootedArmorClass { get; set; }
+
+        public struct EquippedWeapon
+        {
+            public int weaponAttackBonus;
+            public bool isDexWeapon;
+            public Dice damageDie;
+            public int critThreshold;
+            public int critMultiplier;
+        }
+
+        public Tuple<int, int> Attack(EquippedWeapon weapon)
+        {
+            Dice d20 = new Dice();
+            int ToHit = d20.Roll();
+            int Damage = weapon.damageDie.Roll();
+            if (ToHit > weapon.critThreshold)
+            {
+                Damage *= weapon.critMultiplier;
+            }
+            ToHit += weapon.weaponAttackBonus;
+
+            var AttackResult = Tuple.Create(ToHit, Damage);
+
+            return AttackResult;
+        }
 
         public string[] Feats { get; set; }
         public string[] Languages { get; set; }
@@ -164,6 +184,8 @@ namespace DungeonDice.Models
             public int UseMagicDeviceSkillRank { get; set; }
             public int UseMagicDeviceSkillModifier { get; set; }
         }
+
+        public class Spells { }
 
         public string[] Senses { get; set; }
         public string[] SpecialQualities { get; set; }
